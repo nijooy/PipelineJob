@@ -1,36 +1,28 @@
-pipeline {
-    agent any
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-        stage('Install') {
-            steps {
-                bat 'npm install'
-            }
-        }
-        stage('Test') {
-            steps {
-                bat 'npm test'
-            }
-        }
-        stage('Start') {
-            when {
-                branch 'main'
-            }
-            steps {
-                bat 'npm start'
-            }
+node {
+    stage('Checkout') {
+        git 'https://github.com/nijooy/PipelineJob.git'
+    }
+
+    stage('Build') {
+        try {
+            bat 'npm install'
+        } catch (e) {
+            error "빌드 실패: ${e}"
         }
     }
-    post {
-        success {
-            echo 'Pipeline 성공적으로 완료!'
+
+    stage('Test') {
+        def testPassed = bat(script: 'npm test', returnStatus: true)
+        if (testPassed != 0) {
+            error '테스트 실패!'
         }
-        failure {
-            echo 'Pipeline 실패!'
+    }
+
+    stage('Deploy') {
+        if (env.BRANCH_NAME == 'main') {
+            bat 'npm start'
+        } else {
+            echo 'main 브랜치가 아니라서 실행 생략'
         }
     }
 }
