@@ -7,30 +7,26 @@ pipeline {
                 stage('Build on Agent1') {
                     agent { label 'agent1' }
                     steps {
-                        script {
-                            bat '''
-                              @echo off
-                              chcp 65001 >nul
-                              echo Running build on Agent1...
-                              timeout /T 5 /NOBREAK >nul
-                              echo Build on Agent1 completed!
-                            '''
-                        }
+                        bat '''
+                          @echo off
+                          chcp 65001 >nul
+                          echo Agent1 빌드 수행 중...
+                          ping -n 6 127.0.0.1 >nul
+                          echo Agent1 빌드 완료!
+                        '''
                     }
                 }
 
                 stage('Test on Agent2') {
                     agent { label 'agent2' }
                     steps {
-                        script {
-                            bat '''
-                              @echo off
-                              chcp 65001 >nul
-                              echo Running tests on Agent2...
-                              timeout /T 5 /NOBREAK >nul
-                              echo Tests on Agent2 completed!
-                            '''
-                        }
+                        bat '''
+                          @echo off
+                          chcp 65001 >nul
+                          echo Agent2 테스트 수행 중...
+                          ping -n 6 127.0.0.1 >nul
+                          echo Agent2 테스트 완료!
+                        '''
                     }
                 }
             }
