@@ -8,12 +8,20 @@ pipeline {
                     agent { label 'agent1' }
                     steps {
                         script {
-                            bat '''
-                              @echo off
-                              echo Agent1 빌드 수행 중...
-                              timeout /T 5 /NOBREAK >nul
-                              echo Agent1 빌드 완료!
-                            '''
+                            if (isUnix()) {
+                                sh '''
+                                  echo "Agent1 빌드 수행 중..."
+                                  sleep 5
+                                  echo "Agent1 빌드 완료!"
+                                '''
+                            } else {
+                                bat '''
+                                  @echo off
+                                  echo Agent1 빌드 수행 중...
+                                  timeout /T 5 /NOBREAK >nul
+                                  echo Agent1 빌드 완료!
+                                '''
+                            }
                         }
                     }
                 }
@@ -22,12 +30,20 @@ pipeline {
                     agent { label 'agent2' }
                     steps {
                         script {
-                            bat '''
-                              @echo off
-                              echo Agent2 테스트 수행 중...
-                              timeout /T 5 /NOBREAK >nul
-                              echo Agent2 테스트 완료!
-                            '''
+                            if (isUnix()) {
+                                sh '''
+                                  echo "Agent2 테스트 수행 중..."
+                                  sleep 5
+                                  echo "Agent2 테스트 완료!"
+                                '''
+                            } else {
+                                bat '''
+                                  @echo off
+                                  echo Agent2 테스트 수행 중...
+                                  timeout /T 5 /NOBREAK >nul
+                                  echo Agent2 테스트 완료!
+                                '''
+                            }
                         }
                     }
                 }
