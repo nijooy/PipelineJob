@@ -1,6 +1,6 @@
 node {
     stage('Checkout') {
-        git 'https://github.com/nijooy/PipelineJob.git'
+        git branch: 'main', url: 'https://github.com/nijooy/PipelineJob.git'
     }
 
     stage('Build') {
@@ -19,10 +19,7 @@ node {
     }
 
     stage('Deploy') {
-        if (env.BRANCH_NAME == 'main') {
-            bat 'npm start'
-        } else {
-            echo 'main 브랜치가 아니라서 실행 생략'
-        }
+        // 단일 브랜치이므로 그냥 실행
+        bat 'npm start'
     }
 }
